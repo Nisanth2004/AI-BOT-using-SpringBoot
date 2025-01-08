@@ -6,20 +6,34 @@ const ChatResponse = ({response}) => {
         return null;
     }
 
-    const[candidates,usageMetadata]=response;
+    const{candidates,usageMetadata}=response;
+   
   return (
     <div className='container my-4'>
       <h1>Response</h1>
       {candidates.map((candidate,index)=>(
-        <div class="card mb-3" key={index}>
+        <div className="card mb-3" key={index}>
        
-        <div class="card-body">
-          <h5 class="card-title">Candidate  {index+1}</h5>
-          <p class="card-text">{candidate.content.parts[0].text}</p>
-         
+        <div className="card-body">
+          <h5 className="card-title">Candidate  {index+1}</h5>
+          <p className="card-text">{candidate.content.parts[0].text}</p>
+         <h6>Citations:</h6>
+         <ul>
+            {candidate?.citationMetadata?.citationSources.map((source,idx)=>(
+                <li key={idx}>
+                    <a href={source.url} target="_blank" rel="noopener noreferrer">{source.url}</a>{" "}
+                    (Indexes:{source.startIndex}-{source.endIndex})
+                </li>
+            ))}
+         </ul>
         </div>
       </div>
       ))}
+
+      <h4>Usage MetaData</h4>
+      <p>Prompt Tokens:{usageMetadata.promptTokenCount}</p>
+      <p>ProResponse Tokens:{usageMetadata.candidatesTokenCount}</p>
+      <p>Total Tokens:{usageMetadata.totalTokenCount}</p>
     </div>
   )
 }
